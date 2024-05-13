@@ -3,9 +3,6 @@ library(data.table)
 library(ggplot2)
 np <- import("numpy")
 
-sum(res_DTW == 0)/length(res_DTW)
-
-
 load_data = function(method, digit, n){
   predicted_label_ = paste0('predicted_label_test_for_digit_',digit,'_nTrain_',n,'.npy')
   true_label_ = paste0('true_label_test_for_digit_',digit,'_nTrain_',n,'.npy')
@@ -81,14 +78,9 @@ bymethodLabel = datasn100[, .N, by = c('method', 'true_label', 'predicted_label'
 names(bymethodLabel)[2] = 'True Labels'
 names(bymethodLabel)[3] = 'Predicted Labels'
 library(RColorBrewer)
-# 从ColorBrewer中选择一个调色板
+
 my_palette <- brewer.pal(10, "Set3")
 
-my_colors <- c("#E41A1C", "#377EB8", 
-                            "#4DAF4A", "#984EA3",
-                            "#FF7F00", "#FFFF33",
-                            "#A65628", "#F781BF",
-                            "#999999", "#000000")
 ggplot(bymethodLabel, aes(x = `True Labels`, y = N , fill = `Predicted Labels`))+
   geom_bar(position="fill", stat="identity")+
   facet_wrap(~method)+
