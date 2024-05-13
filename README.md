@@ -6,7 +6,7 @@ STKNet is a model to caculate the distance of handwriting trajectories. Below is
 ![modelSTK](https://github.com/HeHuangDortmund/STKNet/assets/34254372/eaa103ae-ec54-4ff8-b466-841be90bfaff)
 
 
-A quick view of the results is as follows
+A quick view of the results on MNIST data set is as follows
 
 
 ![ACC](https://github.com/HeHuangDortmund/STKNet/assets/34254372/111c136b-0c45-421d-a526-2e5c2fe60edc)
