@@ -151,8 +151,6 @@ def createData(bb, n_oneNumber_train):
                    (bb * n_oneNumber_train):(((bb + 1) * n_oneNumber_train))]
 
     ind0123456789 = indices_of_0 + indices_of_1 + indices_of_2 + indices_of_3 + indices_of_4 + indices_of_5 + indices_of_6 + indices_of_7 + indices_of_8 + indices_of_9
-    # ind0123456789 = indices_of_0 + indices_of_1 + indices_of_2 + indices_of_3 + indices_of_4
-    # ind0123456789 = indices_of_0 + indices_of_1 + indices_of_2 + indices_of_3 + indices_of_6 + indices_of_7 + indices_of_8 + indices_of_9
     file_paths = ["./data/sequences/" + file_name for file_name in file_names_points]
 
     sequence_list = []
@@ -196,7 +194,6 @@ def createData(bb, n_oneNumber_train):
             new_indices = np.arange(desired_length) * (num_points - 1) / (desired_length - 1)
         else:
             new_indices = np.linspace(0, num_points - 1, desired_length)
-        # Bicubic interpolation for x and y coordinates separately
         interp_x = interp1d(old_indices, sequence[:, 0], kind='cubic')
         interp_y = interp1d(old_indices, sequence[:, 1], kind='cubic')
         interpolated_sequence_x = interp_x(new_indices)
@@ -230,7 +227,6 @@ def createData(bb, n_oneNumber_train):
             new_indices = np.arange(desired_length) * (num_points - 1) / (desired_length - 1)
         else:
             new_indices = np.linspace(0, num_points - 1, desired_length)
-        # Bicubic interpolation for x and y coordinates separately
         interp_x = interp1d(old_indices, sequence[:, 0], kind='cubic')
         interp_y = interp1d(old_indices, sequence[:, 1], kind='cubic')
         interpolated_sequence_x = interp_x(new_indices)
@@ -247,7 +243,6 @@ def createData(bb, n_oneNumber_train):
             new_indices = np.arange(desired_length) * (num_points - 1) / (desired_length - 1)
         else:
             new_indices = np.linspace(0, num_points - 1, desired_length)
-        # Bicubic interpolation for x and y coordinates separately
         interp_x = interp1d(old_indices, sequence[:, 0], kind='cubic')
         interp_y = interp1d(old_indices, sequence[:, 1], kind='cubic')
         interpolated_sequence_x = interp_x(new_indices)
@@ -278,7 +273,6 @@ def createData(bb, n_oneNumber_train):
     labels2 = np.repeat(np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]), n_oneNumber_train)  # Original labels
     combined__labels = np.tile(labels2, 5)
     n_tra = len(combined_data)
-    # Generate all combinations of three elements from the range 0 to 199
     combinations_list = np.array(list(combinations(range(n_tra), 2)))
     x1 = np.array([combined_data[i] for i in combinations_list[:, 0]])
     x2 = np.array([combined_data[i] for i in combinations_list[:, 1]])
@@ -406,10 +400,6 @@ class GlobalInfoProcess(keras.layers.Layer):
         conv10_out = self.conv10(x)
         conv11_out = self.conv11(x)
 
-
-
-        # Pooling layers
-
         concatenate1 = self.flatten(tf.concat(
             [self.global_avg_pooling(conv1_out),
                 self.global_avg_pooling(conv2_out),
@@ -448,7 +438,6 @@ class LocalInfoProcess(keras.layers.Layer):
     def __init__(self, **kwargs):
         super(LocalInfoProcess, self).__init__(**kwargs)
         self.weight_decay = 0.001  # 'default'
-        # ... (your layer definitions here)
         self.batch_norm = BatchNormalization()
 
         self.conv33 = SpatialTemporalConvolution(spatial_filters=1, spatial_kernel_size=(3, 3))
