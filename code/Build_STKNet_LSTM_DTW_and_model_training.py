@@ -83,32 +83,31 @@ def remove_random_points(trajectory):
     return np.array(trajectory)
 
 def stretch_trajectory(trajectory):
-    # 随机选择起始和终结点
-    start_idx = random.randint(0, len(trajectory) - 2)  # 确保不选择最后一个点作为起始点
+    
+    start_idx = random.randint(0, len(trajectory) - 2)  
     end_idx = random.randint(start_idx + 1, len(trajectory) - 1)
 
-    # 获取起始点和终结点
+
     start_point = trajectory[start_idx]
     end_point = trajectory[end_idx]
 
-    # 生成随机的缩放因子
+
     factor = random.uniform(0.2, 1.8)
 
-    # 构建缩放矩阵
     scaling_matrix = np.array([[factor, 0],
                                [0, factor]])
 
-    # 将起始点和终结点缩放
+
     scaled_start_point = scaling_matrix @ (start_point - np.mean([start_point, end_point], axis=0)) + np.mean(
         [start_point, end_point], axis=0)
     scaled_end_point = scaling_matrix @ (end_point - np.mean([start_point, end_point], axis=0)) + np.mean(
         [start_point, end_point], axis=0)
 
-    # 对起始点和终结点之间的轨迹进行局部拉伸或缩小
+ 
     stretched_trajectory = []
     for i, point in enumerate(trajectory):
         if start_idx <= i <= end_idx:
-            # 将轨迹点围绕中心进行缩放
+  
             scaled_point = scaling_matrix @ (point - np.mean([start_point, end_point], axis=0)) + np.mean(
                 [start_point, end_point], axis=0)
             stretched_trajectory.append(scaled_point)
@@ -298,7 +297,7 @@ class SpatialTemporalConvolution(tf.keras.layers.Layer):
 
     def build(self, input_shape):
         self.spatial_conv = tf.keras.layers.Conv2D(self.spatial_filters, self.spatial_kernel_size, padding='same')
-        self.temporal_kernel = tf.constant_initializer(1.0)  # 时间卷积核的参数全是1，不需要训练
+        self.temporal_kernel = tf.constant_initializer(1.0)  
 
     def call(self, spatial_input):
         batch_size = tf.shape(spatial_input)[0]
@@ -338,17 +337,17 @@ class GetGlobalForm(Layer):
         super(GetGlobalForm, self).__init__(**kwargs)
 
     def call(self, inputs):
-        # 构造不同大小的子矩阵
+    
         matrices = []
         for size in range(5, 13):
             n1 = inputs.shape[1]
             indices1 = [i * (n1 - 1) // (size - 1) for i in range(size)]
             sub_matrix = tf.gather(inputs, indices1, axis=1)
             sub_matrix = tf.gather(sub_matrix, indices1, axis=2)
-            # 计算 pad 的数量
+        
             pad_rows = 12 - sub_matrix.shape[1]
             pad_cols = 12 - sub_matrix.shape[2]
-            # 使用 tf.pad 进行填充，考虑 batchsize 维度
+    
             sub_matrix_padded = tf.pad(sub_matrix, paddings=[(0, 0), (0, pad_rows), (0, pad_cols)])
             matrices.append(sub_matrix_padded)
         resultts = tf.stack(matrices, axis=-1)  # Specify axis=3
@@ -631,7 +630,7 @@ def model_predict_test(digit, n_oneNumber_train=20):
     label_train = np.repeat(np.arange(10), n_oneNumber_train)
     top_k_indices = np.argpartition(distances_2d, k, axis=1)[:, :k]
     def find_mode_along_rows(array):
-        # 使用 apply_along_axis 函数计算每一行的众数
+    
         mode_along_rows = np.apply_along_axis(lambda x: np.bincount(x).argmax(), axis=1, arr=array)
 
         return mode_along_rows
@@ -644,7 +643,7 @@ def model_predict_test(digit, n_oneNumber_train=20):
     label_train_DTW = np.repeat(np.arange(10), n_oneNumber_train)
     top_k_indices_DTW = np.argpartition(distances_2d_DTW, k, axis=1)[:, :k]
     def find_mode_along_rows_DTW(array):
-        # 使用 apply_along_axis 函数计算每一行的众数
+       
         mode_along_rows = np.apply_along_axis(lambda x: np.bincount(x).argmax(), axis=1, arr=array)
         return mode_along_rows
     modes_DTW = find_mode_along_rows_DTW(label_train_DTW[top_k_indices_DTW])
@@ -655,8 +654,8 @@ num_dimensions = 2
 sequence_length = desired_length
 def create_lstm_model(input_shape, num_classes):
     model = Sequential([
-        LSTM(64, input_shape=input_shape),  # LSTM层，128个隐藏单元
-        Dense(num_classes, activation='softmax')  # 输出层，softmax激活函数
+        LSTM(64, input_shape=input_shape), 
+        Dense(num_classes, activation='softmax') 
     ])
 
     return model
@@ -715,7 +714,7 @@ for n_oneNumber_train in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 120]:
     model.fit(train_x, train_y, epochs=30, batch_size=1024, shuffle=True)
 
     model_lstm = create_lstm_model((sequence_length, features), num_classes)
-    # 编译模型
+  
     optimizer = Adam(learning_rate=0.001)
     model_lstm.compile(optimizer=optimizer, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     model_lstm.fit(combined_data, combined__labels, batch_size=1024, epochs=1000)
