@@ -25,7 +25,6 @@ size_img = 28
 threshold_color = 100 / 255
 def greyscale(images):
     return np.array([cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) for img in images])
-# Normilize data
 x_train = x_train.astype('float32')
 x_test = x_test.astype('float32')
 x_train /= 255
